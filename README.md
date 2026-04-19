@@ -19,7 +19,7 @@ Project Helix is a local-first, multi-agent orchestration framework designed to 
 ## 🛠️ Installation
 
 ### Prerequisites
--   **Python 3.11+**
+-   **Python 3.11 Won't work with 3.14**
 -   **Node.js & npm** (for frontend development)
 -   **Docker Desktop** (Required for the sandbox)
 
