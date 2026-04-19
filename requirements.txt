@@ -1,0 +1,10 @@
+crewai
+crewai-tools
+docker
+python-dotenv
+litellm
+pydantic
+fastapi
+uvicorn
+chromadb
+websockets
