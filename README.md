@@ -49,10 +49,18 @@ Project Helix is a local-first, multi-agent orchestration framework designed to 
 
 ## 💻 Usage
 
-### Option 1: Native Desktop App
-Double-click the `Helix.exe` in the `dist` folder (on Windows). Use the in-app **Settings** menu to manage your API keys.
+### 🚀 The Recommended Way (Native Desktop App)
+For the best experience, simply use the pre-built desktop application. No terminal commands required!
 
-### Option 2: Developer Mode (CLI + Web)
+1.  Navigate to the `dist/` folder.
+2.  Double-click **`Helix.exe`**.
+3.  Click the **Settings** gear icon ⚙️ in the app to add your API keys.
+4.  Enter your mission objective and launch the fleet!
+
+---
+
+### 🛠️ Developer Mode (Running from Source)
+If you want to modify the code or contribute to the project:
 1.  **Start the Backend:**
     ```bash
     python api.py
