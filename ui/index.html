@@ -4,92 +4,189 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Helix - Agentic Development Fleet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Project Helix: Your local-first autonomous AI development team. 7 specialized agents working in concert to build software." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
     <div id="app">
-      <div class="glass-container">
-        <header>
-          <div class="header-top">
-            <h1>Project Helix</h1>
-            <button id="settings-btn" class="icon-btn" title="Settings">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            </button>
-          </div>
-          <p>Your local-first autonomous AI development team</p>
-        </header>
 
-        <main>
-          <div class="controls">
-            <div class="input-group">
-              <label for="model-select">LLM Provider</label>
-              <input type="text" id="model-select" value="ollama/qwen2.5-coder:7b" placeholder="e.g., ollama/llama3 or openrouter/qwen/qwen-plus" />
-            </div>
-            
-            <div class="input-group">
-              <label for="goal-input">Mission Objective</label>
-              <textarea id="goal-input" rows="4" placeholder="What do you want to build? (e.g., Build a local scientific calculator app)"></textarea>
-            </div>
+      <!-- Left Sidebar: Mission History -->
+      <aside id="history-panel" class="history-panel">
+        <div class="history-header">
+          <h3>Mission History</h3>
+          <button id="refresh-history" class="icon-btn" title="Refresh">⟳</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <p class="sys-msg">No missions yet.</p>
+        </div>
+      </aside>
 
-            <button id="launch-btn" class="glow-btn">
-              <span>Launch Fleet</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-            </button>
-          </div>
-
-          <div class="terminal-container">
-            <div class="terminal-header">
-              <div class="mac-btns">
-                <span class="close"></span>
-                <span class="minimize"></span>
-                <span class="maximize"></span>
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="glass-container">
+          <header>
+            <div class="header-top">
+              <div class="brand">
+                <div class="brand-icon">🧬</div>
+                <div>
+                  <h1>Project Helix</h1>
+                  <p class="subtitle">Autonomous AI Development Fleet</p>
+                </div>
               </div>
-              <span class="terminal-title">Fleet Execution Logs</span>
+              <button id="settings-btn" class="icon-btn" title="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              </button>
             </div>
-            <div class="terminal-body" id="logs-output">
-              <p class="sys-msg">Waiting for mission deployment...</p>
+          </header>
+
+          <main>
+            <div class="controls">
+              <div class="controls-row">
+                <div class="input-group">
+                  <label for="model-select">🤖 AI Model</label>
+                  <select id="model-select">
+                    <optgroup label="⚡ Local (Ollama)">
+                      <option value="ollama/llama3.2:1b">llama3.2:1b — Tiny &amp; Fast</option>
+                      <option value="ollama/qwen2.5-coder:7b">qwen2.5-coder:7b — Smart Coder</option>
+                      <option value="ollama/phi4">phi4 — Phi 4</option>
+                    </optgroup>
+                    <optgroup label="☁️ Free Cloud">
+                      <option value="groq/llama-3.1-8b-instant">Groq: Llama 3.1 8B — Free &amp; Fast</option>
+                      <option value="groq/llama3-70b-8192">Groq: Llama 3 70B (Legacy)</option>
+                      <option value="groq/llama-3.3-70b-versatile" selected>Groq: Llama 3.3 70B Versatile ✓ (Recommended)</option>
+                    </optgroup>
+                    <optgroup label="🚀 Premium Cloud">
+                      <option value="openrouter/qwen/qwen-2.5-coder-32b-instruct">OpenRouter: Qwen 2.5 Coder 32B</option>
+                      <option value="openai/gpt-4o-mini">OpenAI: GPT-4o Mini</option>
+                      <option value="openai/gpt-4o">OpenAI: GPT-4o</option>
+                      <option value="anthropic/claude-3-5-sonnet-20241022">Anthropic: Claude 3.5 Sonnet</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label for="project-input">📁 Project Name</label>
+                  <input type="text" id="project-input" placeholder="e.g., finance-dashboard" />
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="goal-input">🎯 Mission Objective</label>
+                <textarea id="goal-input" rows="3" placeholder="What do you want to build? (e.g., Build a personal finance dashboard with expense tracking and charts)"></textarea>
+              </div>
+
+              <div class="action-row">
+                <button id="launch-btn" class="glow-btn">
+                  <span>🚀 Launch Fleet</span>
+                </button>
+                <button id="stop-btn" class="stop-btn hidden">
+                  <span>⛔ Stop Mission</span>
+                </button>
+                <button id="open-workspace-btn" class="workspace-btn hidden">
+                  <span>📂 Open Workspace</span>
+                </button>
+              </div>
             </div>
-          </div>
-        </main>
+
+            <!-- Agent Progress Bar -->
+            <div id="progress-section" class="progress-section hidden">
+              <div class="progress-agents">
+                <div class="agent-step" data-step="1">
+                  <div class="agent-dot">🏛️</div>
+                  <span>Architect</span>
+                </div>
+                <div class="agent-step" data-step="2">
+                  <div class="agent-dot">🔬</div>
+                  <span>Researcher</span>
+                </div>
+                <div class="agent-step" data-step="3">
+                  <div class="agent-dot">💻</div>
+                  <span>Engineer</span>
+                </div>
+                <div class="agent-step" data-step="4">
+                  <div class="agent-dot">🔧</div>
+                  <span>Debugger</span>
+                </div>
+                <div class="agent-step" data-step="5">
+                  <div class="agent-dot">🛡️</div>
+                  <span>QA</span>
+                </div>
+                <div class="agent-step" data-step="6">
+                  <div class="agent-dot">⚖️</div>
+                  <span>Reviewer</span>
+                </div>
+                <div class="agent-step" data-step="7">
+                  <div class="agent-dot">✍️</div>
+                  <span>Scribe</span>
+                </div>
+              </div>
+              <div class="progress-bar-track">
+                <div id="progress-bar-fill" class="progress-bar-fill" style="width:0%"></div>
+              </div>
+              <p id="progress-label" class="progress-label">Initializing fleet...</p>
+            </div>
+
+            <!-- Terminal Output -->
+            <div class="terminal-container">
+              <div class="terminal-header">
+                <div class="mac-btns">
+                  <span class="close"></span>
+                  <span class="minimize"></span>
+                  <span class="maximize"></span>
+                </div>
+                <span class="terminal-title">Fleet Execution Logs</span>
+                <button id="copy-btn" class="clear-btn">📋 Copy</button>
+                <button id="clear-btn" class="clear-btn">Clear</button>
+              </div>
+              <div class="terminal-body" id="logs-output">
+                <p class="sys-msg">Waiting for mission deployment...</p>
+              </div>
+            </div>
+          </main>
+        </div>
       </div>
     </div>
-    
+
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal hidden">
       <div class="modal-content glass-container">
         <div class="modal-header">
-          <h2>API Keys Settings</h2>
+          <h2>⚙️ Settings</h2>
           <button id="close-settings" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="modal-body">
-          <p class="modal-desc">Keys are stored securely in your browser's local storage and sent dynamically to the local backend.</p>
-          <div class="input-group">
-            <label for="key-openrouter">OpenRouter API Key</label>
-            <input type="password" id="key-openrouter" placeholder="sk-or-v1-..." />
-          </div>
-          <div class="input-group">
-            <label for="key-openai">OpenAI API Key</label>
-            <input type="password" id="key-openai" placeholder="sk-..." />
-          </div>
-          <div class="input-group">
-            <label for="key-anthropic">Anthropic API Key</label>
-            <input type="password" id="key-anthropic" placeholder="sk-ant-..." />
-          </div>
-          <div class="input-group">
-            <label for="key-deepseek">DeepSeek API Key</label>
-            <input type="password" id="key-deepseek" placeholder="sk-..." />
+          <p class="modal-desc">Keys are stored in your browser's local storage. Leave empty if not using that provider.</p>
+          <div class="keys-grid">
+            <div class="input-group">
+              <label for="key-groq">🆓 Groq API Key (Free)</label>
+              <input type="password" id="key-groq" placeholder="gsk_..." />
+            </div>
+            <div class="input-group">
+              <label for="key-openrouter">🔀 OpenRouter API Key</label>
+              <input type="password" id="key-openrouter" placeholder="sk-or-v1-..." />
+            </div>
+            <div class="input-group">
+              <label for="key-openai">🤖 OpenAI API Key</label>
+              <input type="password" id="key-openai" placeholder="sk-..." />
+            </div>
+            <div class="input-group">
+              <label for="key-anthropic">🧠 Anthropic API Key</label>
+              <input type="password" id="key-anthropic" placeholder="sk-ant-..." />
+            </div>
+            <div class="input-group">
+              <label for="key-tavily">🔍 Tavily API Key (Free Search)</label>
+              <input type="password" id="key-tavily" placeholder="tvly-..." />
+            </div>
+            <div class="input-group">
+              <label for="key-deepseek">🐬 DeepSeek API Key</label>
+              <input type="password" id="key-deepseek" placeholder="sk-..." />
+            </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button id="save-settings" class="glow-btn">Save Settings</button>
+          <button id="save-settings" class="glow-btn">💾 Save Settings</button>
         </div>
       </div>
-    </div>
-    
-    <div id="loading-overlay" class="hidden">
-      <div class="spinner"></div>
-      <p>Agents are working... Please wait.</p>
     </div>
 
     <script type="module" src="/main.js"></script>

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "20260420184210",
+    "timestamp": "2026-04-20T18:42:10.108662",
+    "goal": "build a scientific calculator that should work smoothly on browser on desktop as well as mobile phones it should have retro gameboy style ui and green color for display and blueish grey for body of calc",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "scientific_calcy_retro",
+    "status": "failed",
+    "result": "Mission Failed: cannot schedule new futures after shutdown"
+  },
+  {
+    "id": "20260420182707",
+    "timestamp": "2026-04-20T18:27:07.919076",
+    "goal": "build a scientific calculator that should work smoothly on browser on desktop as well as mobile phones it should have retro gameboy style ui and green color for display and blueish grey for body of calc",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "scientificcalc",
+    "status": "failed",
+    "result": "Mission Failed: litellm.BadRequestError: GroqException - {\"error\":{\"message\":\"Failed to call a function. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"tool_use_failed\",\"failed_generation\":\"\\u003cfunction=write_file_tool\\u003e{\\\"filepath\\\": \\\"plan.md\\\", \\\"content\\\": \\\"# Scientific Calculator Project Plan\\\\n## Introduction\\\\nThe goal of this project is to build a scientific calculator with a retro Gameboy-style UI that works smoothly o"
+  },
+  {
+    "id": "20260420182426",
+    "timestamp": "2026-04-20T18:24:26.285487",
+    "goal": "build a scientific calculator that should work smoothly on browser on desktop as well as mobile phones it should have retro gameboy style ui and green color for display and blueish grey for body of calc",
+    "model": "groq/llama3-70b-8192",
+    "project": "scientific_calculator_1",
+    "status": "failed",
+    "result": "Mission Failed: litellm.BadRequestError: GroqException - {\"error\":{\"message\":\"The model `llama3-70b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.\",\"type\":\"invalid_request_error\",\"code\":\"model_decommissioned\"}}\n"
+  },
+  {
+    "id": "20260420182359",
+    "timestamp": "2026-04-20T18:23:59.007560",
+    "goal": "build a scientific calculator that should work smoothly on browser on desktop as well as mobile phones it should have retro gameboy style ui and green color for display and blueish grey for body of calc",
+    "model": "groq/llama3-70b-8192",
+    "project": "scientific_calculator_1",
+    "status": "failed",
+    "result": "Mission Failed: litellm.BadRequestError: GroqException - {\"error\":{\"message\":\"The model `llama3-70b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.\",\"type\":\"invalid_request_error\",\"code\":\"model_decommissioned\"}}\n"
+  },
+  {
+    "id": "20260420181608",
+    "timestamp": "2026-04-20T18:16:08.230038",
+    "goal": "build a scientific calculator that should work smoothly on browser on desktop as well as mobile phones it should have retro gameboy style ui and green color for display and blueish grey for body of calc",
+    "model": "groq/llama-3.1-8b-instant",
+    "project": "scientific_calc",
+    "status": "failed",
+    "result": "Mission Failed: litellm.BadRequestError: GroqException - {\"error\":{\"message\":\"Failed to call a function. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"tool_use_failed\",\"failed_generation\":\"\\u003cfunction=write_file_tool\\u003e{\\\"filepath\\\": \\\"plan.md\\\", \\\"content\\\": \\\"# Scientific Calculator Project Plan\\\\n\\\\n## Table of Contents\\\\n\\\\n1. [Introduction](#Introduction)\\\\n2. [Technical Requirements](#Technical-Requirements)\\\\n3. [Project"
+  },
+  {
+    "id": "20260420180855",
+    "timestamp": "2026-04-20T18:08:55.354479",
+    "goal": "build a scientific calculator that works on browser smoothly with consuming very less resources also it should work on both desktop and mobile phone keep the ui simple minimal with green for display and blueish grey for body of calc",
+    "model": "groq/llama-3.1-8b-instant",
+    "project": "scientific_calculator",
+    "status": "failed",
+    "result": "Mission Failed: litellm.BadRequestError: GroqException - {\"error\":{\"message\":\"tool call validation failed: attempted to call tool 'plan' which was not in request.tools\",\"type\":\"invalid_request_error\",\"code\":\"tool_use_failed\",\"failed_generation\":\"\\u003cfunction=plan\\u003e{\\\"title\\\": \\\"Project Plan\\\", \\\"description\\\": \\\"Detailed architecture and implementation plan for a scientific calculator.\\\"}+\\u003c/function\\u003e\\n\\n\"}}\n"
+  },
+  {
+    "id": "20260420180807",
+    "timestamp": "2026-04-20T18:08:07.116118",
+    "goal": "build a scientific calculator that works on browser smoothly with consuming very less resources also it should work on both desktop and mobile phone keep the ui simple minimal with green for display and blueish grey for body of calc",
+    "model": "ollama/llama3.2:1b",
+    "project": "scientific_calculator",
+    "status": "success",
+    "result": "{\n    \"name\": \"review_python\",\n    \"parameters\": {\n        \"requirements.txt\": {\n            \"filepath\": {\"type\":\"string\"},\n            \"object\": {\n                \"read_file_tool\": {\n                    \"function\": [\n                        \"{function <nil> {read_file_tool}\",\n                        \"\"\"\n                        java\n                            import java.io.*;\n            \n                        public class MainApplication extends Application {\n    \n                          "
+  }
+]
