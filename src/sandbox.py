@@ -1,5 +1,6 @@
 import docker
 import os
+import threading
 
 class DockerSandbox:
     def __init__(self, workspace_dir: str, image: str = "python:3.11-slim"):
@@ -19,41 +20,53 @@ class DockerSandbox:
             print(f"Pulling Docker image {self.image}...")
             self.client.images.pull(self.image)
 
-    def execute_command(self, command: str) -> str:
-        """Executes a command inside the Docker sandbox."""
+    def execute_command(self, command: str, timeout: int = 30) -> str:
+        """Executes a command inside the Docker sandbox with a hard timeout."""
         print(f"\n[Sandbox] Executing: {command}")
+        container = None
         try:
-            # We run a temporary container for each command
             container = self.client.containers.run(
                 self.image,
-                # Use sh -c to allow complex shell commands with pipes, etc.
                 command=["sh", "-c", command],
                 volumes={self.workspace_dir: {'bind': '/workspace', 'mode': 'rw'}},
                 working_dir='/workspace',
                 detach=True,
-                remove=True # auto-remove after run
+                remove=False,
+                network_mode='none',
+                mem_limit='512m',
+                cpu_quota=100000
             )
-            logs = []
-            for line in container.logs(stream=True):
-                logs.append(line.decode('utf-8'))
-            output = "".join(logs)
+            
+            # Hard timeout using threading timer
+            kill_timer = threading.Timer(timeout, lambda: container.kill(signal=9))
+            kill_timer.start()
+            
+            result = container.wait()
+            kill_timer.cancel()
+            
+            logs = container.logs().decode('utf-8', errors='replace')
+            container.remove(force=True)
+            
+            output = logs[:4000]  # Prevent memory bloat from huge logs
             print(f"[Sandbox] Output:\n{output}")
             return output if output else "Command executed successfully (no output)."
+            
         except docker.errors.ContainerError as e:
-            error_msg = f"Error executing command:\n{e.stderr.decode('utf-8')}"
-            print(f"[Sandbox] {error_msg}")
-            return error_msg
+            return f"Error executing command:\n{e.stderr.decode('utf-8', errors='replace')}"
         except Exception as e:
-            error_msg = f"Sandbox Error: {str(e)}"
-            print(f"[Sandbox] {error_msg}")
-            return error_msg
+            if container:
+                try:
+                    container.kill(signal=9)
+                    container.remove(force=True)
+                except Exception:
+                    pass
+            return f"Sandbox Error: {str(e)}"
 
     def write_file(self, file_path: str, content: str) -> str:
         """Writes a file to the workspace directory."""
         full_path = os.path.join(self.workspace_dir, file_path)
         if not os.path.abspath(full_path).startswith(self.workspace_dir):
             return "Error: Cannot write outside of the workspace directory."
-        
         try:
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
             with open(full_path, 'w', encoding='utf-8') as f:
@@ -68,7 +81,6 @@ class DockerSandbox:
         full_path = os.path.join(self.workspace_dir, file_path)
         if not os.path.abspath(full_path).startswith(self.workspace_dir):
             return "Error: Cannot read outside of the workspace directory."
-        
         try:
             with open(full_path, 'r', encoding='utf-8') as f:
                 return f.read()

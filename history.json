@@ -1,5 +1,59 @@
 [
   {
+    "id": "20260421004844",
+    "timestamp": "2026-04-21T00:48:44.305421",
+    "goal": "build a scientific calculator that works smoothly on browser",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "scientific__calculatorr",
+    "status": "success",
+    "result": "{\"status\": \"success\", \"files_created\": 6, \"project\": \"Scientific Calculator\", \"tokens\": {\"prompt\": 2098, \"completion\": 3361, \"total\": 5459}, \"cost\": 0.0039}"
+  },
+  {
+    "id": "20260420235932",
+    "timestamp": "2026-04-20T23:59:32.081413",
+    "goal": "make a retro gameboy sstyle scientific calculator web app",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "scientific_calc",
+    "status": "failed",
+    "result": "{\"status\": \"failed\", \"reason\": \"exception\", \"error\": \"MissionStateMachine._emit() got multiple values for argument 'content'\"}"
+  },
+  {
+    "id": "20260420233935",
+    "timestamp": "2026-04-20T23:39:35.025425",
+    "goal": "Create a Python script that prints \"Hello from Helix\" and a README explaining what it does.",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "test_hello",
+    "status": "success",
+    "result": "{\"status\": \"success\", \"files_created\": 3, \"project\": \"Helix Project\"}"
+  },
+  {
+    "id": "20260420231626",
+    "timestamp": "2026-04-20T23:16:26.947134",
+    "goal": "Create a Python script that prints \"Hello from Helix\" and a README explaining what it does.",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "test_hello",
+    "status": "failed",
+    "result": "{\"status\": \"failed\", \"reason\": \"agent_error\", \"error\": \"Failed to generate code for README.md. Tried 2 model(s):\\n  \\u2022 groq: litellm.RateLimitError: RateLimitError: GroqException - {\\\"error\\\":{\\\"message\\\":\\\"Rate limit reached for \\n  \\u2022 ollama attempt 1: JSON error\\n  \\u2022 ollama attempt 2: JSON error\"}"
+  },
+  {
+    "id": "20260420230758",
+    "timestamp": "2026-04-20T23:07:58.511264",
+    "goal": "Create a Python script that prints \"Hello from Helix\" and a README explaining what it does.",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "test_hello",
+    "status": "failed",
+    "result": "{\"status\": \"failed\", \"reason\": \"agent_error\", \"error\": \"Failed to generate valid plan. Tried 2 model(s):\\n  \\u2022 groq: 1 validation error for ProjectPlan\\nmilestones.0.files_to_create.1.test_strategy\\n  Input should be 'unit', 'integration',\\n  \\u2022 ollama: 1 validation error for ProjectPlan\\n  Invalid JSON: EOF while parsing an object at line 63 column 32 [type=json_invalid, \"}"
+  },
+  {
+    "id": "20260420230149",
+    "timestamp": "2026-04-20T23:01:49.859346",
+    "goal": "Create a Python script that prints \"Hello from Helix\" and a README explaining what it does.",
+    "model": "groq/llama-3.3-70b-versatile",
+    "project": "test_hello",
+    "status": "failed",
+    "result": "{\"status\": \"failed\", \"reason\": \"agent_error\", \"error\": \"Failed to generate valid plan. Last error: litellm.AuthenticationError: AuthenticationError: OpenrouterException - {\\\"error\\\":{\\\"message\\\":\\\"No cookie auth credentials found\\\",\\\"code\\\":401}}\"}"
+  },
+  {
     "id": "20260420184210",
     "timestamp": "2026-04-20T18:42:10.108662",
     "goal": "build a scientific calculator that should work smoothly on browser on desktop as well as mobile phones it should have retro gameboy style ui and green color for display and blueish grey for body of calc",

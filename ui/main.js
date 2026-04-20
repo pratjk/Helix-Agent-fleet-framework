@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // ── Elements ──────────────────────────────────────────────────
   const launchBtn = document.getElementById('launch-btn');
   const stopBtn = document.getElementById('stop-btn');
   const openWorkspaceBtn = document.getElementById('open-workspace-btn');
@@ -14,8 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressLabel = document.getElementById('progress-label');
   const historyList = document.getElementById('history-list');
   const refreshHistoryBtn = document.getElementById('refresh-history');
+  const costTracker = document.getElementById('cost-tracker');
+  const tokenCount = document.getElementById('token-count');
+  const costUsd = document.getElementById('cost-usd');
 
-  // Settings
   const settingsBtn = document.getElementById('settings-btn');
   const settingsModal = document.getElementById('settings-modal');
   const closeSettings = document.getElementById('close-settings');
@@ -27,16 +28,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const keyTavily = document.getElementById('key-tavily');
   const keyDeepSeek = document.getElementById('key-deepseek');
 
+  const approvalModal = document.getElementById('approval-modal');
+  const approvalFilePath = document.getElementById('approval-file-path');
+  const approvalContent = document.getElementById('approval-content');
+  const approvalEdit = document.getElementById('approval-edit');
+  const approvalAccept = document.getElementById('approval-accept');
+  const approvalReject = document.getElementById('approval-reject');
+
   let apiKeys = {};
   let activeSocket = null;
   let currentProject = '';
+  let currentApprovalStepId = null;
 
   const AGENT_LABELS = [
     'Architect', 'Researcher', 'Principal Engineer',
     'Code Surgeon', 'Guardian (QA)', 'Gatekeeper (Reviewer)', 'Scribe'
   ];
 
-  // ── Load Saved Keys ───────────────────────────────────────────
   const loadKeys = () => {
     const saved = localStorage.getItem('helix_api_keys');
     if (saved) {
@@ -51,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   loadKeys();
 
-  // ── Settings Modal ────────────────────────────────────────────
   settingsBtn.addEventListener('click', () => settingsModal.classList.remove('hidden'));
   closeSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
   settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.add('hidden'); });
@@ -70,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     appendLog('✅ Settings saved.\n', 'sys-msg');
   });
 
-  // ── Copy Logs ──────────────────────────────────────────────────
   const stripAnsi = (str) => str.replace(/\u001b\[[\d;]*[a-zA-Z]|\[\d+[A-Za-z]|□\[[\d;]*m/g, '');
 
   copyBtn.addEventListener('click', () => {
@@ -85,12 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ── Clear Terminal ─────────────────────────────────────────────
   clearBtn.addEventListener('click', () => {
     logsOutput.innerHTML = '<p class="sys-msg">Terminal cleared. Ready for next mission.</p>';
   });
 
-  // ── Progress Helpers ───────────────────────────────────────────
   const setProgress = (step) => {
     const pct = Math.round((step / 7) * 100);
     progressFill.style.width = `${pct}%`;
@@ -109,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.agent-step').forEach(el => el.classList.remove('active', 'done'));
   };
 
-  // ── Log Helper ─────────────────────────────────────────────────
   const appendLog = (text, cls = '') => {
     const span = document.createElement('span');
     if (cls) span.className = cls;
@@ -118,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     logsOutput.scrollTop = logsOutput.scrollHeight;
   };
 
-  // ── Mission History ────────────────────────────────────────────
   const loadHistory = async () => {
     try {
       const res = await fetch('/api/history');
@@ -148,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadHistory();
   refreshHistoryBtn.addEventListener('click', loadHistory);
 
-  // ── Open Workspace ─────────────────────────────────────────────
   openWorkspaceBtn.addEventListener('click', async () => {
     await fetch('/api/open-workspace', {
       method: 'POST',
@@ -157,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ── Stop Mission ───────────────────────────────────────────────
   stopBtn.addEventListener('click', () => {
     if (activeSocket) {
       activeSocket.send(JSON.stringify({ type: 'cancel' }));
@@ -166,7 +166,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ── Launch Mission ─────────────────────────────────────────────
+  approvalAccept.addEventListener('click', () => {
+    if (!activeSocket || !currentApprovalStepId) return;
+    const edited = approvalEdit.value;
+    const original = approvalContent.textContent;
+    const action = edited !== original ? 'edit' : 'accept';
+    activeSocket.send(JSON.stringify({
+      type: 'approval_response',
+      step_id: currentApprovalStepId,
+      action: action,
+      content: edited
+    }));
+    approvalModal.classList.add('hidden');
+    appendLog(`👤 User ${action}ed: ${approvalFilePath.textContent}\n`, 'sys-msg');
+    currentApprovalStepId = null;
+  });
+
+  approvalReject.addEventListener('click', () => {
+    if (!activeSocket || !currentApprovalStepId) return;
+    activeSocket.send(JSON.stringify({
+      type: 'approval_response',
+      step_id: currentApprovalStepId,
+      action: 'reject'
+    }));
+    approvalModal.classList.add('hidden');
+    appendLog(`👤 User rejected: ${approvalFilePath.textContent}\n`, 'sys-msg');
+    currentApprovalStepId = null;
+  });
+
   launchBtn.addEventListener('click', () => {
     const model = modelSelect.value;
     const goal = goalInput.value.trim();
@@ -176,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!goal) { alert('Please enter a mission objective!'); return; }
 
-    // Reset UI
     logsOutput.innerHTML = '';
     progressSection.classList.remove('hidden');
     resetProgress();
@@ -184,6 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
     stopBtn.classList.remove('hidden');
     stopBtn.disabled = false;
     openWorkspaceBtn.classList.add('hidden');
+    costTracker.classList.remove('hidden');
+    tokenCount.textContent = '0';
+    costUsd.textContent = '0.0000';
 
     appendLog(`🚀 Launching Mission\n🤖 Model: ${model}\n📁 Project: ${project}\n🎯 Goal: ${goal}\n\n`);
 
@@ -198,8 +227,15 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === 'log') {
-        // Parse step announcements for progress bar
+      if (data.type === 'approval_request') {
+        currentApprovalStepId = data.step_id;
+        approvalFilePath.textContent = data.path;
+        approvalContent.textContent = data.code;
+        approvalEdit.value = data.code;
+        approvalModal.classList.remove('hidden');
+        appendLog(`⏸️ Waiting for approval: ${data.path}\n`, 'sys-msg');
+
+      } else if (data.type === 'log') {
         const stepMatch = data.content.match(/Step (\d+)\/7:/);
         if (stepMatch) setProgress(parseInt(stepMatch[1]));
         appendLog(data.content);
@@ -211,6 +247,10 @@ document.addEventListener('DOMContentLoaded', () => {
         appendLog('\n\n✅ MISSION ACCOMPLISHED\n', 'sys-msg');
         appendLog('──────────────────────────────────────\n');
         appendLog(data.content + '\n');
+        if (data.tokens) {
+          tokenCount.textContent = data.tokens.total || 0;
+          costUsd.textContent = (data.cost || 0).toFixed(4);
+        }
         currentProject = data.project || project;
         finishMission();
 
@@ -241,6 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
     stopBtn.classList.add('hidden');
     openWorkspaceBtn.classList.remove('hidden');
     activeSocket = null;
+    approvalModal.classList.add('hidden');
+    currentApprovalStepId = null;
     loadHistory();
   };
 });
